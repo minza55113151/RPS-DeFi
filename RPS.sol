@@ -28,10 +28,7 @@ contract RPS is CommitReveal, TimeUnit {
     uint private lastActionTime = block.timestamp;
 
     function checkPlayer() public view {
-        require(msg.sender == 0xE0f5206BBD039e7b0592d8918820024e2a7437b9);
-        require(msg.sender == 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2);
-        require(msg.sender == 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
-        require(msg.sender == 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB);
+        require(msg.sender == 0xE0f5206BBD039e7b0592d8918820024e2a7437b9 || msg.sender == 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2 || msg.sender == 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db || msg.sender == 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB);
     }
 
     function hashChoiceWithSalt(uint choice, string memory salt) public pure returns (bytes32) {
