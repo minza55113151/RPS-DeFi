@@ -40,7 +40,7 @@ contract RPS is CommitReveal, TimeUnit {
     }
 
     function playerJoin() public payable {
-        // checkPlayer();
+        checkPlayer();
         require(numPlayer < 2);
         require(msg.value == 1 ether);
         reward += msg.value;
