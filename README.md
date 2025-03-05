@@ -95,7 +95,7 @@ function _resetGame() private {
 Use to reset state of contract when game ended.
 <hr/>
 
-### โค้ดที่ป้องกันการ lock เงินไว้ใน contract
+### โค้ดที่ป้องกันการ lock เงินไว้ใน contract และโค้ดส่วนที่จัดการกับความล่าช้าที่ผู้เล่นไม่ครบทั้งสองคนเสียที
 ```solidity
 function playerWithdraw() public {
     // require some player
@@ -172,31 +172,9 @@ function playerCommitHashChoice(bytes32 hashChoice) public  {
     setStartTime();
 }
 ```
+เป็น function ที่ใช้การ commit choice ของผู้เล่น โดยผู้เล่นจะต้องนำ hash จาก function `hashChoiceWithSalt` มาใส่ใน function นี้เพื่อเป็นการ 
+commit โดยจะใช้ CommitReveal.sol เช็คเรื่องการ commit ของ player
 
-
-### โค้ดส่วนที่จัดการกับความล่าช้าที่ผู้เล่นไม่ครบทั้งสองคนเสียที
-```solidity
-function playerCommitHashChoice(bytes32 hashChoice) public  {
-    // require 2 player
-    require(numPlayer == 2);
-    // require sender are player
-    require(msg.sender == players[0].addr || msg.sender == players[1].addr);
-
-    if (msg.sender == players[0].addr){
-        require(!players[0].isCommitted, "Player already committed");
-        players[0].isCommitted = true;
-    }
-    else if(msg.sender == players[1].addr){
-        require(!players[1].isCommitted, "Player already committed");
-        players[1].isCommitted = true;
-    }
-
-    commit(getHash(hashChoice));
-    numInput++;
-    emit PlayerCommittedHashChoice(msg.sender, numInput);
-    setStartTime();
-}
-```
 ### โค้ดส่วนทำการ reveal และนำ choice มาตัดสินผู้ชนะ 
 ```solidity
 function playerReveal(uint choice, string memory salt) public {
@@ -226,3 +204,5 @@ function playerReveal(uint choice, string memory salt) public {
     setStartTime();
 }
 ```
+เมื่อผู้เล่นมีการ reveal ครบสองคนแล้วก็จะมีการเรียก function `_checkWinnerAndPay()` ที่ใช้ในการแจกรางวัลตามที่ผู้เล่นได้เลือก choice มาและมีการ
+`_resetGame()` ที่ใช้ในการ reset state ของ contract เพื่อให้ contract สามารถทำงานต่อไปได้
